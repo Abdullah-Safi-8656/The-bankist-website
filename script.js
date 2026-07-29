@@ -56,3 +56,16 @@ document
 btnToscroll.addEventListener('click', function(e) {
   section1.scrollIntoView({behavior: 'smooth'});
 });
+
+// page navigation
+// using event delegation and event bubling
+document.querySelector('.nav__links').addEventListener('click', function(e) {
+  e.preventDefault();
+
+  // matching stratgy
+  if(e.target.classList.contains('nav__link')) {
+    console.log(e.target);
+    const id = e.target.getAttribute('href');
+    document.querySelector(id).scrollIntoView({behavior: 'smooth'});
+  };
+});
