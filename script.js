@@ -139,11 +139,13 @@ const RevaleSection = function(entries, observer){
 
   const [entry] = entries;
 
-  if (!entry.isIntersecting) return
-  entry.target.classList.remove('section--hidden');
-  observer.unobserve(entry.target);
-  console.log(observer)
-
+  entries.forEach(entry => {
+    
+      if (!entry.isIntersecting) return
+      entry.target.classList.remove('section--hidden');
+      observer.unobserve(entry.target);
+  });
+  
 };
 
 const sectionObserver = new IntersectionObserver(RevaleSection, 
