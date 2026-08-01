@@ -18,7 +18,8 @@ const tabs = document.querySelectorAll('.operations__tab');
 const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
 
-const nav = document.querySelector('.nav')
+const nav = document.querySelector('.nav');
+const allSectoins = document.querySelectorAll('.section');
 
 const openModal = function () {
   modal.classList.remove('hidden');
@@ -67,7 +68,6 @@ document.querySelector('.nav__links').addEventListener('click', function(e) {
 
   // matching stratgy
   if(e.target.classList.contains('nav__link')) {
-    console.log(e.target);
     const id = e.target.getAttribute('href');
     document.querySelector(id).scrollIntoView({behavior: 'smooth'});
   };
@@ -97,7 +97,7 @@ tabsContainer.addEventListener('click', function(e) {
 const handleHover = function(e) {
   if (e.target.classList.contains('nav__link'))  {
     const link = e.target;
-    const sibling = e.target.closest('.nav').querySelectorAll('.nav__link');
+    const sibling = link.closest('.nav').querySelectorAll('.nav__link');
     const logo = link.closest('.nav').querySelector('img');
 
     sibling.forEach(el => {
@@ -114,7 +114,8 @@ nav.addEventListener('mouseover', handleHover.bind(0.5));
 nav.addEventListener('mouseout', handleHover.bind(1));
 
 // Sticky Nav using IntersectionObserver API
-const navHeight = nav.getBoundingClientRect().height;
+const navHeight = nav.getBoundingClientRect().height
+
 const stickyNav = function(entries) {
   const [entry] = entries;
 
@@ -122,11 +123,37 @@ const stickyNav = function(entries) {
   else nav.classList.remove('sticky');
 };
 
-const headObserver = new IntersectionObserver(stickyNav, {
-  root: null,
-  threshold: 0,
-  rootMargin: `-${navHeight}px`
+const headObserver = new IntersectionObserver(stickyNav, 
+  {
+    root: null,
+    threshold: 0,
+    rootMargin: `-${navHeight}px`
   }
 );
 
 headObserver.observe(header);
+
+
+// Revale sections
+const RevaleSection = function(entries, observer){
+
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) return
+  entry.target.classList.remove('section--hidden');
+  observer.unobserve(entry.target);
+  console.log(observer)
+
+};
+
+const sectionObserver = new IntersectionObserver(RevaleSection, 
+  {
+    root: null,
+    threshold: 0.15
+  }  
+);
+
+allSectoins.forEach(function(section) {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+});
