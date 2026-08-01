@@ -20,6 +20,7 @@ const tabsContent = document.querySelectorAll('.operations__content');
 
 const nav = document.querySelector('.nav');
 const allSectoins = document.querySelectorAll('.section');
+const targetImages = document.querySelectorAll('img[data-src]');
 
 const openModal = function () {
   modal.classList.remove('hidden');
@@ -145,7 +146,7 @@ const RevaleSection = function(entries, observer){
       entry.target.classList.remove('section--hidden');
       observer.unobserve(entry.target);
   });
-  
+
 };
 
 const sectionObserver = new IntersectionObserver(RevaleSection, 
@@ -159,3 +160,28 @@ allSectoins.forEach(function(section) {
   sectionObserver.observe(section);
   section.classList.add('section--hidden');
 });
+
+// Lazy load images
+const LoadImg = function(entries, observe) {
+  const [entry] = entries;
+
+  if(!entry.isIntersecting) return;
+
+  entry.target.src = entry.target.dataset.src;
+
+  entry.target.addEventListener('load', function() {
+    entry.target.classList.remove('lazy-img');
+  });
+
+  observe.unobserve(entry.target);
+};
+
+const imageObserver = new IntersectionObserver(LoadImg, 
+  {
+    root: null,
+    threshold: 0,
+    rootMargin: '200px'
+  }
+);
+
+targetImages.forEach(img => imageObserver.observe(img));
