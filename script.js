@@ -26,6 +26,8 @@ const slides = document.querySelectorAll('.slide');
 const btnLeft = document.querySelector('.slider__btn--left');
 const btnRight = document.querySelector('.slider__btn--right');
 const dotsBtnContainer = document.querySelector('.dots');
+const upArrow = document.querySelector('.upArrow');
+const footer = document.querySelector('.footer')
 
 const openModal = function () {
   modal.classList.remove('hidden');
@@ -259,4 +261,31 @@ dotsBtnContainer.addEventListener('click', function(e) {
     ActiveDots(slide);
 
   };
-})
+});
+
+// Revale ArrowUp when it reaches the footer
+const revealArrowUp = function (entries) {
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) {
+    upArrow.classList.add("hidden");
+  } else {
+    upArrow.classList.remove("hidden");
+  };
+
+};
+
+const downSectionObserver = new IntersectionObserver(revealArrowUp, {
+  root: null,
+  threshold: 0.15,
+  rootMargin: '200px'
+});
+
+downSectionObserver.observe(footer);
+
+// Scroll to the top when clicked
+upArrow.addEventListener("click", function () {
+  header.scrollIntoView({
+    behavior: "smooth",
+  });
+});
